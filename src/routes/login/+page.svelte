@@ -1,55 +1,30 @@
-<!-- /src/routes/login/+page.svelte -->
-
 <script lang="ts">
-  import type { PageData } from "./$types.js";
-  import LoginForm from "./login-form.svelte";
-  export let data: PageData;
-  import * as Card from "$lib/components/ui/card";
+  import { staticState } from "$lib";
+  import { onMount } from "svelte";
+  import Login from "./Login.svelte";
+  import Register from "./Register.svelte";
+  import { getSession } from "../../hooks.client";
+  import { goto } from "$app/navigation";
 
-  let { supabase } = data;
-  $: ({ supabase } = data);
-
-  let email;
-  let password;
-
-  const handleSignUp = async () => {
-    await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/login/callback`,
-      },
-    });
-  };
-
-  const handleSignIn = async () => {
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-  };
+  onMount(async () => {
+    if (await getSession()) {
+      goto("/");
+    }
+  });
 </script>
 
-<!-- <form on:submit={handleSignUp}>
-  <input name="email" bind:value={email} />
-  <input type="password" name="password" bind:value={password} />
-  <button>Sign up</button>
-</form> -->
-
-<!-- <button on:click={handleSignIn}>Sign in</button>
-<button on:click={handleSignOut}>Sign out</button> -->
-
-<Card.Root class="w-[380px]">
-  <Card.Header>
-    <Card.Title class="text-3xl font-bold">Iniciar Sesion</Card.Title>
-    <Card.Description>Escribe tu email y contraseña</Card.Description>
-  </Card.Header>
-
-  <Card.Content class="grid gap-4">
-    <LoginForm data={data.form} />
-  </Card.Content>
-</Card.Root>
+{#await getSession()}
+  <p>Firewall checking</p>
+{:then ditoYun}
+  {#if ditoYun}
+    <p>nice try hackers</p>
+  {:else}
+    <main>
+      {#if $staticState.showReg}
+        <Register />
+      {:else}
+        <Login />
+      {/if}
+    </main>
+  {/if}
+{/await}

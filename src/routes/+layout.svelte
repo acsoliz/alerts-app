@@ -1,28 +1,34 @@
+<!-- /src/routes/+layout.svelte -->
 <script lang="ts">
   import "../app.css";
-  import { invalidate } from "$app/navigation";
+
+  import { userTokenStore } from "$lib";
+  import { supabase } from "../hooks.client";
+  import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
+  import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { page } from "$app/stores";
 
-  export let data;
-
-  let { supabase, session } = data;
-  $: ({ supabase, session } = data);
-
+  supabase.auth.onAuthStateChange(
+    (event: AuthChangeEvent, session: Session | null) => {
+      $userTokenStore = session?.access_token;
+    }
+  );
   onMount(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, _session) => {
-      if (_session?.expires_at !== session?.expires_at) {
-        invalidate("supabase:auth");
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    // Check if user is logged in
+    if (!$userTokenStore && $page.url.pathname !== "/Login") {
+      goto("/Login");
+    }
   });
 </script>
 
-<slot />
-
-<!-- <slot></slot> -->
-
-<style></style>
+{#if $userTokenStore || $page.url.pathname === "/Login"}
+  <!-- <main class="w-[100%]"> -->
+  <!-- <main class=""> -->
+  <a href="/">Main View</a>
+  <a href="/Login" class="transition-all active:scale-95 hover:opacity-60 p-2"
+    >Login</a
+  >
+  <slot />
+  <!-- </main> -->
+{/if}

@@ -3,7 +3,6 @@
   import Label from "$lib/components/ui/label/label.svelte";
   import * as Pagination from "$lib/components/ui/pagination";
   import { writable } from "svelte/store";
-  import AlertsTable from "./alerts-table.svelte";
 
   export let data;
   export let count;
@@ -30,7 +29,7 @@
     }}
     let:pages
     let:currentPage={$page}
-    class="w-[auto] border-2 border-gray-300"
+    class="w-[auto] "
   >
     <Pagination.Content>
       <Pagination.Item>
