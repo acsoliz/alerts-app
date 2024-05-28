@@ -25,9 +25,7 @@ node_modules/
 .vercel/
 
 # Entorno de desarrollo
-.env
 .svelte-kit
-package-lock.json
 yarn.lock
 
 # Archivos de prueba
