@@ -4,7 +4,7 @@
   import * as Pagination from "$lib/components/ui/pagination";
   import { writable } from "svelte/store";
 
-  export let data;
+  export let alerts;
   export let count;
   export let perPage;
   export let page = writable(1);
@@ -13,7 +13,7 @@
     let startIndex = (newPageNumber - 1) * perPage;
     let endIndex = startIndex + perPage;
 
-    page.set(data.slice(startIndex, endIndex));
+    page.set(alerts.slice(startIndex, endIndex));
   }
 </script>
 

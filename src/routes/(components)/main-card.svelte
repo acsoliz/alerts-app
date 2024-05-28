@@ -3,8 +3,8 @@
   import { writable } from "svelte/store";
   import { AlertsTable, DataTableToolbar, Pagination } from "./index";
 
-  export let data = []; // Declarar la prop data
-
+  export let data;
+  // console.log(data);
   let perPage = 5;
   let page = writable(data.slice(0, perPage)); // page es ahora un writable
 
@@ -12,7 +12,7 @@
 </script>
 
 <div class="grid gap-4 border-2 w-[70%]">
-  <DataTableToolbar {page} {data} {perPage} />
+  <DataTableToolbar {page} alerts={data} {perPage} />
   <AlertsTable {page} />
-  <Pagination {count} {perPage} {page} {data} />
+  <Pagination {count} {perPage} {page} alerts={data} />
 </div>
