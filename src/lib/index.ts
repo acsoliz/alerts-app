@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-const key: string = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-const url: string = import.meta.env.VITE_SUPABASE_URL as string;
+// const key: string = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+// const url: string = import.meta.env.VITE_SUPABASE_URL as string;
 
 // export { key, url };
 // place files you want to import through the `$lib` alias in this folder.
