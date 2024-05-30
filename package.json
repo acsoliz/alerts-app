@@ -27,6 +27,7 @@
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "^0.13.0",
 		"@supabase/supabase-js": "^2.43.2",
+		"@sveltejs/adapter-static": "^3.0.1",
 		"bits-ui": "^0.21.9",
 		"clsx": "^2.1.1",
 		"cmdk-sv": "^0.0.17",
