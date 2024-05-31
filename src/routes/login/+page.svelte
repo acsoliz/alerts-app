@@ -1,8 +1,8 @@
 <script lang="ts">
   import { staticState } from "$lib";
   import { onMount } from "svelte";
-  import Login from "./Login.svelte";
-  import Register from "./Register.svelte";
+  import Login from "./login.svelte";
+  import Register from "./register.svelte";
   import { getSession } from "../../hooks.client";
   import { goto } from "$app/navigation";
 
