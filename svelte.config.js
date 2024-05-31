@@ -9,6 +9,13 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
+		vite: {
+			resolve: {
+				alias: {
+					$routes: path.resolve('./src/routes')
+				}
+			}
+		},
 		// adapter: adapter(),
 		paths: { assets: "", base: "/PERSONAL_PATH" },
 		adapter: adapter({
