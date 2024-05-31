@@ -35,3 +35,7 @@ export async function loadInitialData() {
     // const { data: sensorsData } = await supabase.from('sensors').select('*');
     sensors.set(sensorsData);
 }
+export function handleError({ error, event }) {
+    // tu manejo de errores aquí
+    console.error('en handleError, error::', error);
+}
