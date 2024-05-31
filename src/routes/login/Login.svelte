@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { scale } from "svelte/transition";
   import { supabase } from "../../hooks.client";
   import { staticState, userTokenStore } from "$lib";
   import Button from "$lib/components/ui/button/button.svelte";
@@ -60,10 +59,9 @@
     >
   </Card.Content>
   <div class="">
-      <p>Don't have an account yet?</p>
-      <button
-      class=""
-        on:click={() => ($staticState.showReg = true)}>Register here</button
-      >
-    </div>
+    <p>Don't have an account yet?</p>
+    <button class="" on:click={() => ($staticState.showReg = true)}
+      >Register here</button
+    >
+  </div>
 </Card.Root>

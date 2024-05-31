@@ -27,7 +27,7 @@ node_modules/
 # Entorno de desarrollo
 .svelte-kit
 yarn.lock
-build
+build/
 
 # Archivos de prueba
 test/
