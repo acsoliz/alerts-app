@@ -1,42 +1,21 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-
-// import adapter from '@sveltejs/adapter-cloudflare';
 import adapter from '@sveltejs/adapter-static';
-import path from 'path';
+import path from 'path'; // Importar el módulo path
 
-// 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		vite: {
-			resolve: {
-				alias: {
-					$routes: path.resolve('./src/routes')
-				}
-			}
-		},
-		// adapter: adapter(),
-		paths: { assets: "", base: "/alerts-app" },
 		adapter: adapter({
-			// NOT HERE!
-			paths: { base: "/alerts-app" },
 			fallback: 'index.html',
 			precompress: false,
 		}),
-		// adapter: adapter({
-		// 	pages: 'build',
-		// 	assets: 'build',
-		// 	fallback: 'index.html'
-		// }),
-		prerender:
-		{
+		prerender: {
 			entries: ['*']
-			// default: true
 		},
 		alias: {
-			"@/*": "./src/*",
+			"@/*": path.resolve('src') // Utilizando el módulo path para resolver la ruta
 		},
 	}
 };
