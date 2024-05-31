@@ -1,5 +1,5 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-cloudflare';
 import path from 'path'; // Importar el módulo path
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -7,10 +7,7 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter({
-			fallback: 'index.html',
-			precompress: false,
-		}),
+		adapter: adapter(),
 		prerender: {
 			entries: ['*']
 		},
