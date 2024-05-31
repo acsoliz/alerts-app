@@ -2,6 +2,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 // import adapter from '@sveltejs/adapter-cloudflare';
 import adapter from '@sveltejs/adapter-static';
+import path from 'path';
 
 // 
 /** @type {import('@sveltejs/kit').Config} */
@@ -17,7 +18,7 @@ const config = {
 			}
 		},
 		// adapter: adapter(),
-		paths: { assets: "", base: "/PERSONAL_PATH" },
+		paths: { assets: "", base: "/alerts-app" },
 		adapter: adapter({
 			// NOT HERE!
 			paths: { base: "/alerts-app" },
