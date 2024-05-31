@@ -5,14 +5,25 @@ import adapter from '@sveltejs/adapter-cloudflare';
 const config = {
 	preprocess: vitePreprocess(),
 
+	// kit: {
+	// 	adapter: adapter(),
+	// 	prerender: {
+	// 		entries: ['*']
+	// 	},
+	// 	alias: {
+	// 		"@/*": "./src/*",
+	// 	},
+	// }
 	kit: {
 		adapter: adapter(),
-		prerender: {
-			entries: ['*']
-		},
-		alias: {
-			"@/*": "./src/*",
-		},
+		target: '#svelte',
+		vite: {
+			resolve: {
+				alias: {
+					$routes: '/src/routes'
+				}
+			}
+		}
 	}
 };
 
