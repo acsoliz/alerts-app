@@ -28,11 +28,11 @@
     <p>nice try hackers</p>
   {:else}
     <main>
-      <!-- {#if $staticState.showReg} -->
-      <!-- <Register /> -->
-      <!-- {:else} -->
+      {#if $staticState.showReg}
+      <Register />
+      {:else}
       <Login />
-      <!-- {/if} -->
+      {/if}
     </main>
   {/if}
 {/await}
