@@ -16,19 +16,19 @@
   );
   onMount(() => {
     // Check if user is logged in
-    // if (!$userTokenStore && $page.url.pathname !== "/login") {
-    //   goto("/login");
-    // }
+    if (!$userTokenStore && $page.url.pathname !== "/login") {
+      goto("/login");
+    }
   });
 </script>
 
-<!-- {#if $userTokenStore || $page.url.pathname === "/login"} -->
-<!-- <main class="w-[100%]"> -->
-<!-- <main class=""> -->
-<a href="/">Main View</a>
-<a href="/login" class="transition-all active:scale-95 hover:opacity-60 p-2"
-  >Login</a
->
-<slot />
-<!-- </main> -->
-<!-- {/if} -->
+{#if $userTokenStore || $page.url.pathname === "/login"}
+  <!-- <main class="w-[100%]"> -->
+  <!-- <main class=""> -->
+  <a href="/">Main View</a>
+  <a href="/login" class="transition-all active:scale-95 hover:opacity-60 p-2"
+    >Login</a
+  >
+  <slot />
+  <!-- </main> -->
+{/if}
