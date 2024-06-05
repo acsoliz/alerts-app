@@ -6,10 +6,7 @@
   import { loadInitialData, loadUserAlerts } from "../hooks.client";
   import { alerts, types, subtypes, sensors } from "../stores/alertStore";
   import * as Sheet from "$lib/components/ui/sheet/index.js";
-  import { Input } from "$lib/components/ui/input/index.js";
-  import { Label } from "$lib/components/ui/label/index.js";
   import Button from "$lib/components/ui/button/button.svelte";
-  import { FaBars } from "svelte-icons/fa"; // Importar el ícono de hamburguesa
 
   onMount(async () => {
     await loadUserAlerts();
@@ -25,8 +22,22 @@
     <Sheet.Root>
       <Sheet.Trigger asChild let:builder>
         <Button builders={[builder]} variant="link" class="p-1 m-1">
-          <FaBars
-          /><!-- TODO. debe estar mas pegado a la izquierda no debe hacer margen izquierdo ni padding, el tamaño debe ser un pooc mas grande  -->
+          <svg
+            width="32px"
+            height="32px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="inline-block"
+          >
+            <path
+              d="M4 6H20M4 12H20M4 18H20"
+              stroke="#000000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </Button>
       </Sheet.Trigger>
       <Sheet.Content side="left">
