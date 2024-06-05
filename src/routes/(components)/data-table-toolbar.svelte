@@ -26,7 +26,6 @@
       );
 
       page.set(filteredData.slice(0, perPage));
-      console.log("filteredData:::", filteredData);
     } else {
       filteredData = alerts;
     }

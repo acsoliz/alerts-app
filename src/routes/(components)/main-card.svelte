@@ -4,7 +4,6 @@
   import { AlertsTable, DataTableToolbar, Pagination } from "./index";
 
   export let data;
-  // console.log(data);
   let perPage = 5;
   let page = writable(data.slice(0, perPage)); // page es ahora un writable
 

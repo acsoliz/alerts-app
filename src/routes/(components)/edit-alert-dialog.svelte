@@ -52,7 +52,7 @@
   function setAlertValues() {
     let selectedValues = findSubtypeByIdOrValue(
       initialSubtypes,
-      selectedSubtype
+      selectedSubtype,
     );
     alertsValues = transformAlertValues(selectedValues);
   }
@@ -140,7 +140,9 @@
     {/if}
 
     <Dialog.Footer>
-      <Button variant="outline" type="reset">Cancelar</Button>
+      <Dialog.Close
+        ><Button variant="outline" type="reset">Cancelar</Button></Dialog.Close
+      >
       <Button on:click={setNewAlert} type="button">Guardar</Button>
     </Dialog.Footer>
   </Dialog.Content>

@@ -7,6 +7,6 @@ export const POST: RequestHandler = async ({ locals }) => {
 	if (err) {
 		throw error(500, "Something went wrong logging you out.")
 	}
-
+	console.log('en Server.ts, localsss::', locals)
 	throw redirect(303, "/")
 }

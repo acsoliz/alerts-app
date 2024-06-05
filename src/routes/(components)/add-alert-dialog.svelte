@@ -70,7 +70,7 @@
 
   function findSubtypeByIdOrValue(key) {
     return initialSubtypes.find(
-      (subtype) => subtype.id === key || subtype.value === key
+      (subtype) => subtype.id === key || subtype.value === key,
     );
   }
 
@@ -241,7 +241,9 @@
     {/if}
 
     <Dialog.Footer>
-      <Button variant="outline" type="reset">Cancelar</Button>
+      <Dialog.Close
+        ><Button variant="outline" type="reset">Cancelar</Button></Dialog.Close
+      >
       <Button on:click={setNewAlert} type="button">Guardar</Button>
     </Dialog.Footer>
   </Dialog.Content>

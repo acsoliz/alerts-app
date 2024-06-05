@@ -21,7 +21,6 @@
 
   onMount(async () => {
     const session = await getSession();
-    console.log("Session:", session);
     if (session) {
       goto("/");
     }
@@ -87,7 +86,7 @@
         >
       </Card.Header>
       <Card.Content class="grid gap-4">
-        <p>{dsComp.domMsg}</p>
+        <p>{dsComp?.domMsg ?? ""}</p>
         <Label for="email">Email</Label>
         <Input
           type="email"
@@ -105,13 +104,15 @@
           on:click={registerHandler}>Enviar email de validacion</Button
         >
       </Card.Content>
-      <div>
-        <p>¿Tienes una cuenta?</p>
-        <button on:click={() => ($staticState.showReg = false)}
-          >Inicia sesión</button
-        >
-      </div>
     </Card.Root>
+    <div class="w-[380px] p-4 flex justify-between">
+      <Label class=" text-center py-2">¿Tienes una cuenta?</Label>
+      <Button
+        class=""
+        variant="link"
+        on:click={() => ($staticState.showReg = false)}>Inicia sesión</Button
+      >
+    </div>
   {:else}
     <Card.Root class="w-[380px]">
       <Card.Header>
@@ -119,7 +120,7 @@
         <Card.Description>Escribe tu email y contraseña</Card.Description>
       </Card.Header>
       <Card.Content class="grid gap-4">
-        <p>{dsComp.domMsg}</p>
+        <p>{dsComp?.domMsg ?? ""}</p>
         <Label for="email">Email</Label>
         <Input
           type="email"
@@ -136,13 +137,16 @@
           on:click={loginHandler}>Iniciar sesión</Button
         >
       </Card.Content>
-      <div>
-        <p>¿No tienes una cuenta?</p>
-        <button on:click={() => ($staticState.showReg = true)}
-          >Regístrate aquí</button
-        >
-      </div>
     </Card.Root>
+    <div class="w-[380px] p-4 flex justify-between border-solid">
+      <Label class=" text-center py-2">¿No tienes una cuenta?</Label>
+      <!-- class=" text-center py-2 px-2 border-solid border-2 border-red-500" -->
+      <Button
+        class=" border-solid border-2"
+        variant="link"
+        on:click={() => ($staticState.showReg = true)}>Regístrate aquí</Button
+      >
+    </div>
   {/if}
 {/await}
 

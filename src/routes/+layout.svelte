@@ -25,10 +25,10 @@
 {#if $userTokenStore || $page.url.pathname === "/login"}
   <!-- <main class="w-[100%]"> -->
   <!-- <main class=""> -->
-  <a href="/">Main View</a>
+  <!-- <a href="/">Main View</a>
   <a href="/login" class="transition-all active:scale-95 hover:opacity-60 p-2"
     >Login</a
-  >
+  > -->
   <slot />
   <!-- </main> -->
 {/if}

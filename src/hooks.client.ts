@@ -17,10 +17,8 @@ export const getSession = async () => {
 
 export async function loadUserAlerts() {
     let { data, error } = await supabase.from("alerts").select('*');
-    // console.log('data::.', data)
     alerts.set(data);
     let dataalerts = get(alerts)
-    console.log('in load user Alerrts, alerts::', dataalerts)
 
 
 }
