@@ -10,27 +10,46 @@
 
   const logoutHandler = async () => {
     const { error: err } = await supabase.auth.signOut();
-    console.log(`err to logout: err::: ${err}`);
+    console.log(`Error al cerrar sesión: ${err}`);
     goto("/login");
   };
+
+  async function redirectToGuacamole() {
+    console.log("en redirectToGuacamole::::");
+    try {
+      const response = await fetch("/api/generate-token");
+      if (!response.ok) {
+        throw new Error("Error generando el token");
+      }
+      const { token } = await response.json();
+      console.log("token:::", token);
+      window.location.href = `https://217.71.204.218:8443/#/?data=${encodeURIComponent(token)}`;
+    } catch (error) {
+      console.error("Error al redirigir a Guacamole:", error);
+    }
+  }
 </script>
 
 <div class="">
   <Sheet.Header>
     <Sheet.Title>Opciones</Sheet.Title>
     <Separator class="my-4" />
-    <Sheet.Description class="p-2"
-      >Conectate a tu escritorio remoto.</Sheet.Description
-    >
+    <Sheet.Description class="p-2">
+      Conéctate a tu escritorio remoto.
+    </Sheet.Description>
   </Sheet.Header>
 
   <Sheet.Footer>
     <Sheet.Close asChild let:builder>
-      <Button builders={[builder]} class="w-[70%]" type="submit">Acceder</Button
+      <!-- Este es el botón que se debe usar -->
+      <Button
+        on:click={redirectToGuacamole}
+        builders={[builder]}
+        class="w-[70%]"
+        type="button">Acceder</Button
       >
-      <!-- TODO. este boton se esta renderizando al lado derecho, debe estar al centro -->
     </Sheet.Close>
   </Sheet.Footer>
   <Separator class="my-4" />
-  <Button on:click={logoutHandler} variant="link">Cerrar Sesion</Button>
+  <Button on:click={logoutHandler} variant="link">Cerrar Sesión</Button>
 </div>

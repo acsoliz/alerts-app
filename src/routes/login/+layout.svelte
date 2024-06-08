@@ -17,6 +17,7 @@
     domMsg: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   onMount(async () => {
@@ -30,16 +31,21 @@
 
   const loginHandler = async () => {
     dsComp.update((state) => ({ ...state, loader: true }));
-    const { data, error: err } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: $dsComp.email,
       password: $dsComp.password,
     });
-    if (err) {
+    // console.log("en signInWithPassword, data:::", data);
+    if (error) {
       dsComp.update((state) => ({
         ...state,
-        domMsg: `Error at ${err.status} ${err.message}`,
+        domMsg: `${error.message}`,
         loader: false,
       }));
+      console.log(
+        "error in loginhandler",
+        `Error at ${error.status} ${error.message}`,
+      );
     } else {
       dsComp.update((state) => ({ ...state, loader: false }));
       goto("/");
@@ -49,22 +55,32 @@
 
   const registerHandler = async () => {
     dsComp.update((state) => ({ ...state, loader: true }));
+    // Verificar si las contraseñas coinciden
+    if ($dsComp.password !== $dsComp.confirmPassword) {
+      dsComp.update((state) => ({
+        ...state,
+        domMsg: "Las contraseñas no coinciden",
+        loader: false,
+      }));
+      return;
+    }
     const {
       data: { session },
-      error: err,
+      error,
     } = await supabase.auth.signUp({
       email: $dsComp.email,
       password: $dsComp.password,
     });
-    if (err) {
+    if (error) {
       dsComp.update((state) => ({
         ...state,
-        domMsg: `Error at ${err.status} ${err.message}`,
+        domMsg: `${error.message}`,
         loader: false,
       }));
+      console.log(`Error at ${error.status} ${error.message}`);
     } else {
       dsComp.update((state) => ({ ...state, loader: false }));
-      goto("/");
+      // goto("/");
       $userTokenStore = session?.access_token;
     }
   };
@@ -86,7 +102,9 @@
         >
       </Card.Header>
       <Card.Content class="grid gap-4">
-        <p>{dsComp?.domMsg ?? ""}</p>
+        <p class="text-red-500">
+          {$dsComp?.domMsg ?? ""}
+        </p>
         <Label for="email">Email</Label>
         <Input
           type="email"
@@ -94,10 +112,16 @@
           class="input"
           bind:value={$dsComp.email}
         />
+
         <Label for="password">Contraseña</Label>
         <Input type="password" class="input" bind:value={$dsComp.password} />
         <Label for="password-confirmation">Confirma tu Contraseña</Label>
-        <Input type="password" class="input" bind:value={$dsComp.password} />
+        <Input
+          type="password"
+          class="input"
+          bind:value={$dsComp.confirmPassword}
+        />
+
         <Button
           loader={$dsComp.loader}
           loader_title="Registering"
@@ -120,7 +144,10 @@
         <Card.Description>Escribe tu email y contraseña</Card.Description>
       </Card.Header>
       <Card.Content class="grid gap-4">
-        <p>{dsComp?.domMsg ?? ""}</p>
+        <p class="text-red-500">
+          {$dsComp?.domMsg ?? ""}
+        </p>
+
         <Label for="email">Email</Label>
         <Input
           type="email"

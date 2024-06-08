@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import { MainAlertCard, UserOptions } from "./(components)/index";
   import { loadInitialData, loadUserAlerts } from "../hooks.client";
-  import { alerts, types, subtypes, sensors } from "../stores/alertStore";
+  import { alerts } from "../stores/alertStore";
   import * as Sheet from "$lib/components/ui/sheet/index.js";
   import Button from "$lib/components/ui/button/button.svelte";
 
