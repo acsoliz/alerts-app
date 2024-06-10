@@ -5,7 +5,7 @@
   import * as Card from "$lib/components/ui/card/index.js";
   import TypeSubtypeForm from "./type-subtype-form.svelte";
   import AlertValuesForm from "./alert-values-form.svelte";
-  import { loadUserAlerts, supabase } from "../../hooks.client";
+  import { supabase } from "../../hooks.client";
   import { sensorsData, subtypesData, typesData } from "../../data-dummy";
   import { findSubtypeByIdOrValue, transformAlertValues } from "../../helpers";
 
@@ -18,9 +18,6 @@
   let selectedType = alert.type || "";
   let selectedSubtype = alert.subtype || "";
   let alertsValues = { ...alert };
-  // alertsValues = transformAlertValues(selectedValues);
-
-  // let alertsValues = transformAlertValues()
   let newAlert = {
     type: alert.type || "",
     subtype: alert.subtype || "",
@@ -39,11 +36,6 @@
       initialTypes = typesData;
       initialSubtypes = subtypesData;
       initialSensors = sensorsData;
-
-      alertsValues = transformAlertValues(
-        findSubtypeByIdOrValue(initialSubtypes, alert.subtype),
-      );
-      console.log("alert:::::::::::::", alert);
     } catch (error) {
       console.error("Error loading initial data:", error);
     }
@@ -77,16 +69,11 @@
       .update(newAlert)
       .eq("id", alert.id)
       .select();
-    if (error) {
-      // aqui poner el toasted
-      console.error("Error inserting new alert:", error);
-      return;
-    }
-    await loadUserAlerts();
+
+    console.log("data:::: error:::::", { data, error });
   }
 
   function getSelectedSensor(data) {
-    console.log("on getSelectedSensor, data::::", data);
     if (data.value.label === "Sensor de Salida") {
       selectedSensors.output_sensor = data.label;
     } else if (data.value.label === "Sensor de Entrada") {
@@ -146,7 +133,7 @@
         <Card.Content>
           <AlertValuesForm
             {alertsValues}
-            newAlert={alert}
+            {newAlert}
             {selectedSensors}
             onSensorChange={getSelectedSensor}
           />
@@ -158,9 +145,7 @@
       <Dialog.Close
         ><Button variant="outline" type="reset">Cancelar</Button></Dialog.Close
       >
-      <Dialog.Close>
-        <Button on:click={setNewAlert} type="button">Guardar</Button>
-      </Dialog.Close>
+      <Button on:click={setNewAlert} type="button">Guardar</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

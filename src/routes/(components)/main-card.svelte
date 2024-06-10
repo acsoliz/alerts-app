@@ -8,6 +8,10 @@
   let page = writable(data.slice(0, perPage)); // page es ahora un writable
 
   let count = data.length;
+  $: if (data) {
+    page.set(data.slice(0, perPage));
+    count = data.length;
+  }
 </script>
 
 <div class="grid gap-4 border-2 w-[70%]">

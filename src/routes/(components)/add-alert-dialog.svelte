@@ -5,13 +5,37 @@
   import { Label } from "$lib/components/ui/label/index.js";
   import * as Card from "$lib/components/ui/card/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { supabase } from "../../hooks.client";
+  import { loadUserAlerts, supabase } from "../../hooks.client";
   import { get } from "svelte/store";
   import { sensorsData, subtypesData, typesData } from "../../data-dummy";
   import { onMount } from "svelte";
   let initialTypes = [];
   let initialSubtypes = [];
   let initialSensors = [];
+  let userEmail = "";
+
+  const restoreDefaultValues = (data) => {
+    console.log("on restoreDefaultValues, data:::", data);
+    // initialTypes = [];
+    // initialSubtypes = [];
+    // initialSensors = [];
+    selectedType = "";
+    selectedSubtype = "";
+    alertsValues = {};
+    newAlert = {
+      type: "",
+      subtype: "",
+      max_deviation: "",
+      time_in_state: "",
+      status: "Activa",
+      email: "",
+    };
+    selectedSensors = {
+      sensor: "",
+      input_sensor: "",
+      output_sensor: "",
+    };
+  };
 
   onMount(async () => {
     try {
@@ -21,18 +45,15 @@
       //   .select("*");
       // if (typesError) throw typesError;
       initialTypes = typesData;
-
-      // const { data: subtypesData, error: subtypesError } = await supabase
-      //   .from("subtypes")
-      //   .select("*");
-      // if (subtypesError) throw subtypesError;
       initialSubtypes = subtypesData;
-
-      // const { data: sensorsData, error: sensorsError } = await supabase
-      //   .from("sensors")
-      //   .select("*");
-      // if (sensorsError) throw sensorsError;
       initialSensors = sensorsData;
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session && session.user) {
+        userEmail = session.user.email;
+      }
     } catch (error) {
       console.error("Error loading initial data:", error);
     }
@@ -47,6 +68,7 @@
     max_deviation: "",
     time_in_state: "",
     status: "Activa",
+    email: "",
   };
   let selectedSensors = {
     sensor: "",
@@ -65,7 +87,15 @@
   function setAlertValues() {
     let selectedValues = findSubtypeByIdOrValue(selectedSubtype);
     alertsValues = transformAlertValues(selectedValues);
-    return alertsValues;
+    // if
+    // console.log("en Fijar, selectedSubtype:::", selectedSubtype);
+    // console.log("en Fijar, selectedValues:::", selectedValues);
+    if (!selectedValues) {
+      return { message: "No subtype selected" };
+      // Aqui agregar un error
+    } else {
+      return alertsValues;
+    }
   }
 
   function findSubtypeByIdOrValue(key) {
@@ -101,6 +131,7 @@
     newAlert.sensor = selectedSensors.sensor;
     newAlert.input_sensor = selectedSensors.input_sensor;
     newAlert.output_sensor = selectedSensors.output_sensor;
+    newAlert.email = userEmail;
 
     console.log("newAlert::::", newAlert);
 
@@ -108,6 +139,12 @@
       .from("alerts")
       .insert([newAlert])
       .select();
+    if (error) {
+      console.error("Error inserting new alert:", error);
+      return;
+    }
+    await loadUserAlerts();
+    restoreDefaultValues();
   }
 
   function getSelectedSensor(data) {
@@ -242,9 +279,13 @@
 
     <Dialog.Footer>
       <Dialog.Close
-        ><Button variant="outline" type="reset">Cancelar</Button></Dialog.Close
+        ><Button on:click={restoreDefaultValues} variant="outline" type="reset"
+          >Cancelar</Button
+        ></Dialog.Close
       >
-      <Button on:click={setNewAlert} type="button">Guardar</Button>
+      <Dialog.Close>
+        <Button on:click={setNewAlert} type="button">Guardar</Button>
+      </Dialog.Close>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

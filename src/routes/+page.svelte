@@ -14,7 +14,7 @@
   });
 </script>
 
-{#if $alerts.length === 0}
+{#if !$alerts.length}
   <p>Firewall checking</p>
 {:else}
   <!-- <div class="w-[70%] flex border-solid border-red-500"> -->

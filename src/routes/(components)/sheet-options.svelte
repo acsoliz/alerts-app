@@ -18,12 +18,16 @@
     console.log("en redirectToGuacamole::::");
     try {
       const response = await fetch("/api/generate-token");
+      console.log("respuesta de la api de genera el token:::", response);
       if (!response.ok) {
         throw new Error("Error generando el token");
       }
       const { token } = await response.json();
-      console.log("token:::", token);
-      window.location.href = `https://217.71.204.218:8443/#/?data=${encodeURIComponent(token)}`;
+      console.log("generado ok, token:::", token);
+
+      // Open Guacamole login page in a new tab
+      const guacamoleURL = `https://217.71.204.218:8443/#/?data=${encodeURIComponent(token)}`;
+      window.open(guacamoleURL, "_blank");
     } catch (error) {
       console.error("Error al redirigir a Guacamole:", error);
     }

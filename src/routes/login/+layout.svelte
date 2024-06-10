@@ -42,10 +42,10 @@
         domMsg: `${error.message}`,
         loader: false,
       }));
-      console.log(
-        "error in loginhandler",
-        `Error at ${error.status} ${error.message}`,
-      );
+      // console.log(
+      //   "error in loginhandler",
+      //   `Error at ${error.status} ${error.message}`,
+      // );
     } else {
       dsComp.update((state) => ({ ...state, loader: false }));
       goto("/");
@@ -77,10 +77,10 @@
         domMsg: `${error.message}`,
         loader: false,
       }));
-      console.log(`Error at ${error.status} ${error.message}`);
+      // console.log(`Error at ${error.status} ${error.message}`);
     } else {
       dsComp.update((state) => ({ ...state, loader: false }));
-      // goto("/");
+      goto("/");
       $userTokenStore = session?.access_token;
     }
   };

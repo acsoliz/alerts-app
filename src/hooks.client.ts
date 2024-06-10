@@ -18,7 +18,8 @@ export const getSession = async () => {
 export async function loadUserAlerts() {
     let { data, error } = await supabase.from("alerts").select('*');
     alerts.set(data);
-    let dataalerts = get(alerts)
+    // console.log('se cargaran lkos nuevosdata', data)
+    // let dataalerts = get(alerts)
 
 
 }
