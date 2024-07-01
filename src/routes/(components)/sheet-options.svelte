@@ -1,10 +1,10 @@
 <script lang="ts">
   import * as Sheet from "$lib/components/ui/sheet";
   import Button from "$lib/components/ui/button/button.svelte";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
+  // import { Input } from "$lib/components/ui/input";
+  // import { Label } from "$lib/components/ui/label";
   import { Separator } from "$lib/components/ui/separator/index.js";
-  import { Link } from "$lib/components/ui/pagination";
+  // import { Link } from "$lib/components/ui/pagination";
   import { goto } from "$app/navigation";
   import { supabase } from "../../hooks.client";
 

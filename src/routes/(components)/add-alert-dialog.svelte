@@ -1,3 +1,4 @@
+<!-- add-alert-dialog.svelte -->
 <script lang="ts">
   import { Input } from "$lib/components/ui/input";
   import Button from "$lib/components/ui/button/button.svelte";
@@ -6,23 +7,22 @@
   import * as Card from "$lib/components/ui/card/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import { loadUserAlerts, supabase } from "../../hooks.client";
-  import { get } from "svelte/store";
   import { sensorsData, subtypesData, typesData } from "../../data-dummy";
   import { onMount } from "svelte";
+
   let initialTypes = [];
   let initialSubtypes = [];
   let initialSensors = [];
   let userEmail = "";
 
-  const restoreDefaultValues = (data) => {
-    console.log("on restoreDefaultValues, data:::", data);
-    // initialTypes = [];
-    // initialSubtypes = [];
-    // initialSensors = [];
-    selectedType = "";
-    selectedSubtype = "";
-    alertsValues = {};
-    newAlert = {
+  let selectedType = "";
+  let selectedSubtype = "";
+  let alertsValues = {};
+  let newAlert = initializeNewAlert();
+  let selectedSensors = initializeSelectedSensors();
+
+  function initializeNewAlert() {
+    return {
       type: "",
       subtype: "",
       max_deviation: "",
@@ -30,20 +30,26 @@
       status: "Activa",
       email: "",
     };
-    selectedSensors = {
+  }
+
+  function initializeSelectedSensors() {
+    return {
       sensor: "",
       input_sensor: "",
       output_sensor: "",
     };
-  };
+  }
+
+  function restoreDefaultValues() {
+    selectedType = "";
+    selectedSubtype = "";
+    alertsValues = {};
+    newAlert = initializeNewAlert();
+    selectedSensors = initializeSelectedSensors();
+  }
 
   onMount(async () => {
     try {
-      // TODO. implementar los datos en la base de datos de supabase
-      // const { data: typesData, error: typesError } = await supabase
-      //   .from("types")
-      //   .select("*");
-      // if (typesError) throw typesError;
       initialTypes = typesData;
       initialSubtypes = subtypesData;
       initialSensors = sensorsData;
@@ -59,43 +65,12 @@
     }
   });
 
-  let selectedType = "";
-  let selectedSubtype = "";
-  let alertsValues = {};
-  let newAlert = {
-    type: "",
-    subtype: "",
-    max_deviation: "",
-    time_in_state: "",
-    status: "Activa",
-    email: "",
-  };
-  let selectedSensors = {
-    sensor: "",
-    input_sensor: "",
-    output_sensor: "",
-  };
-
-  function getSelectedType({ value }) {
+  function handleSelectedType({ value }) {
     selectedType = value;
   }
 
-  function getSelectedSubtype({ value }) {
+  function handleSelectedSubtype({ value }) {
     selectedSubtype = value;
-  }
-
-  function setAlertValues() {
-    let selectedValues = findSubtypeByIdOrValue(selectedSubtype);
-    alertsValues = transformAlertValues(selectedValues);
-    // if
-    // console.log("en Fijar, selectedSubtype:::", selectedSubtype);
-    // console.log("en Fijar, selectedValues:::", selectedValues);
-    if (!selectedValues) {
-      return { message: "No subtype selected" };
-      // Aqui agregar un error
-    } else {
-      return alertsValues;
-    }
   }
 
   function findSubtypeByIdOrValue(key) {
@@ -125,13 +100,24 @@
     };
   }
 
+  function setAlertValues() {
+    const selectedValues = findSubtypeByIdOrValue(selectedSubtype);
+    if (!selectedValues) {
+      return { message: "No subtype selected" };
+    }
+    alertsValues = transformAlertValues(selectedValues);
+    return alertsValues;
+  }
+
   async function setNewAlert() {
-    newAlert.type = selectedType;
-    newAlert.subtype = selectedSubtype;
-    newAlert.sensor = selectedSensors.sensor;
-    newAlert.input_sensor = selectedSensors.input_sensor;
-    newAlert.output_sensor = selectedSensors.output_sensor;
-    newAlert.email = userEmail;
+    Object.assign(newAlert, {
+      type: selectedType,
+      subtype: selectedSubtype,
+      sensor: selectedSensors.sensor,
+      input_sensor: selectedSensors.input_sensor,
+      output_sensor: selectedSensors.output_sensor,
+      email: userEmail,
+    });
 
     console.log("newAlert::::", newAlert);
 
@@ -147,13 +133,17 @@
     restoreDefaultValues();
   }
 
-  function getSelectedSensor(data) {
-    if (data.value.label === "Sensor de Salida") {
-      selectedSensors.output_sensor = data.label;
-    } else if (data.value.label === "Sensor de Entrada") {
-      selectedSensors.input_sensor = data.label;
-    } else if (data.value.label === "Sensor") {
-      selectedSensors.sensor = data.label;
+  function handleSelectedSensor(data) {
+    const {
+      value: { label },
+      label: sensorLabel,
+    } = data;
+    if (label === "Sensor de Salida") {
+      selectedSensors.output_sensor = sensorLabel;
+    } else if (label === "Sensor de Entrada") {
+      selectedSensors.input_sensor = sensorLabel;
+    } else if (label === "Sensor") {
+      selectedSensors.sensor = sensorLabel;
     }
   }
 </script>
@@ -180,7 +170,7 @@
           <div class="grid grid-cols-2 w-full items-center gap-4">
             <div class="flex flex-col space-y-1.5">
               <Label for="type">Tipo</Label>
-              <Select.Root onSelectedChange={getSelectedType}>
+              <Select.Root onSelectedChange={handleSelectedType}>
                 <Select.Trigger id="type">
                   <Select.Value placeholder="Select" />
                 </Select.Trigger>
@@ -195,7 +185,7 @@
             </div>
             <div class="flex flex-col space-y-1.5">
               <Label for="subtype">Subtipo</Label>
-              <Select.Root onSelectedChange={getSelectedSubtype}>
+              <Select.Root onSelectedChange={handleSelectedSubtype}>
                 <Select.Trigger id="subtype">
                   <Select.Value placeholder="Select" />
                 </Select.Trigger>
@@ -210,7 +200,6 @@
             </div>
           </div>
         </Card.Content>
-
         <Card.Footer class="">
           <Button on:click={setAlertValues} type="submit" class="w-full">
             Fijar
@@ -234,7 +223,7 @@
                 {#each alertsValues?.selectFields as field}
                   <div class="w-full">
                     <Label for={field.label}>{field.label}</Label>
-                    <Select.Root onSelectedChange={getSelectedSensor}>
+                    <Select.Root onSelectedChange={handleSelectedSensor}>
                       <Select.Trigger id={field.label}>
                         <Select.Value placeholder="Select" />
                       </Select.Trigger>
@@ -278,11 +267,11 @@
     {/if}
 
     <Dialog.Footer>
-      <Dialog.Close
-        ><Button on:click={restoreDefaultValues} variant="outline" type="reset"
-          >Cancelar</Button
-        ></Dialog.Close
-      >
+      <Dialog.Close>
+        <Button on:click={restoreDefaultValues} variant="outline" type="reset">
+          Cancelar
+        </Button>
+      </Dialog.Close>
       <Dialog.Close>
         <Button on:click={setNewAlert} type="button">Guardar</Button>
       </Dialog.Close>

@@ -2,6 +2,7 @@
 <script lang="ts">
   import { writable } from "svelte/store";
   import { AlertsTable, DataTableToolbar, Pagination } from "./index";
+  import Navbar from "./navbar.svelte";
 
   export let data;
   let perPage = 5;

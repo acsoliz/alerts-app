@@ -7,7 +7,7 @@
   import { alerts } from "../stores/alertStore";
   import * as Sheet from "$lib/components/ui/sheet/index.js";
   import Button from "$lib/components/ui/button/button.svelte";
-
+  import Navbar from "./(components)/navbar.svelte";
   onMount(async () => {
     await loadUserAlerts();
     await loadInitialData();
@@ -18,7 +18,7 @@
   <p>Firewall checking</p>
 {:else}
   <!-- <div class="w-[70%] flex border-solid border-red-500"> -->
-  <div class="w-[70%] flex">
+  <!-- <div class="w-[100%] flex border-solid border-2 border-red-500">
     <Sheet.Root>
       <Sheet.Trigger asChild let:builder>
         <Button builders={[builder]} variant="link" class="p-1 m-1">
@@ -44,6 +44,7 @@
         <UserOptions />
       </Sheet.Content>
     </Sheet.Root>
-  </div>
+  </div> -->
+  <Navbar />
   <MainAlertCard data={$alerts} />
 {/if}
