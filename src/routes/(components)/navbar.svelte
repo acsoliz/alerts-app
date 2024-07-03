@@ -14,10 +14,14 @@
 
 <svelte:window on:resize={handleResize} />
 <nav class={"navbar"}>
-  <div class="border-solid border-2 border-gray-300 m-6">
+  <div class="border-solid border-2 rounded-lg border-gray-300 m-6">
     <Sheet.Root>
       <Sheet.Trigger asChild let:builder>
-        <Button builders={[builder]} variant="link" class="p-1 m-1">
+        <Button
+          builders={[builder]}
+          variant="link"
+          class="p-1 m-1 hover:bg-gray-300"
+        >
           <svg
             width="32px"
             height="32px"
